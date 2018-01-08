@@ -1,0 +1,470 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Battleship</title>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+    <div id="mini">
+    <script type="text/javascript">
+        let battleship = {
+            start: () => {
+                getBoard();
+                getNull();
+                console.log(battleship.board);
+            },
+            board: [],
+        };
+
+        let GameBoard = {
+            boardHeight: 10,
+            boardWidth: 10,
+            oneDeckersCount: [1,4],
+            twoDeckersCount: [2,3],
+            threeDeckersCount: [3,2],
+            fourDeckersCount: [4,1],
+        };
+
+        function getBoard(){
+            getCells(GameBoard.boardHeight,GameBoard.boardWidth);
+            getShips(GameBoard.boardHeight,GameBoard.boardWidth);
+        }
+
+        function getCells(boardH,boardW){
+            for (let i = 0; i < boardH; i++){
+                battleship.board[i] = [];
+                for (let j = 0; j < boardW; j++){
+                    battleship.board[i][j] = 0;
+                };
+            };
+        }
+
+        function getShips(boardH,boardW){
+            createShipFourDeckers(boardH,boardW,GameBoard.fourDeckersCount[0],GameBoard.fourDeckersCount[1]);
+            createShipThreeDeckers(boardH,boardW,GameBoard.threeDeckersCount[0],GameBoard.threeDeckersCount[1]);
+            createShipTwoDeckers(boardH,boardW,GameBoard.twoDeckersCount[0],GameBoard.twoDeckersCount[1]);
+            createShipOneDeckers(boardH,boardW,GameBoard.oneDeckersCount[0],GameBoard.oneDeckersCount[1]);
+        }
+
+        function createShipFourDeckers(width,height,lengthShip,count_ship){
+            
+            countShips = 0;
+            while(countShips !== count_ship){
+                let location = Math.floor(Math.random() * 2);
+                if( location === 1 ){
+                    location = 'horizontal';
+                    var x = Math.floor(Math.random() * (height - lengthShip - 1));
+                    var y = Math.floor(Math.random() * (width - lengthShip - 1));
+                    var y2 = y+1;
+                    var y3 = y+2;
+                    var y4 = y+3;
+                }
+                else{
+                    location = 'vertical';
+                    var y = Math.floor(Math.random() * (width - lengthShip - 1));
+                    var x = Math.floor(Math.random() * (height - lengthShip - 1));
+                    var x2 = x+1;
+                    var x3 = x+2;
+                    var x4 = x+3;
+                }
+                if(location === 'vertical'){
+                    if(battleship.board[x][y] === 0 && battleship.board[x2][y] === 0){
+                        battleship.board[x][y] = 8;
+                        battleship.board[x2][y] = 8;
+                        battleship.board[x3][y] = 8;
+                        battleship.board[x4][y] = 8;
+                        if(x === 0 && y != 0 ){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y-1] = 7;  
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x4+1][y] = 7;  
+                            battleship.board[x4][y-1] = 7;  
+                            battleship.board[x4][y+1] = 7;  
+                            battleship.board[x4+1][y-1] = 7;  
+                            battleship.board[x4+1][y+1] = 7; 
+                        }
+                        else if(y === 0 && x != 0){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y+1] = 7; 
+                            battleship.board[x2+1][y+1] = 7; 
+                            battleship.board[x4+1][y] = 7;  
+                            battleship.board[x4][y+1] = 7;   
+                            battleship.board[x4+1][y+1] = 7;  
+                        }
+                        else if(y === 0 && x === 0){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7; 
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x4+1][y] = 7;  
+                            battleship.board[x4][y+1] = 7;  
+                            battleship.board[x4+1][y+1] = 7; 
+                        }
+                        else{
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y-1] = 7;
+                            battleship.board[x-1][y+1] = 7;    
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y-1] = 7;
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x4+1][y] = 7;  
+                            battleship.board[x4][y-1] = 7;  
+                            battleship.board[x4][y+1] = 7;  
+                            battleship.board[x4+1][y-1] = 7;  
+                            battleship.board[x4+1][y+1] = 7;  
+                        }
+                        countShips++;
+                    }
+                }
+                else{
+                    if(battleship.board[x][y] === 0 && battleship.board[x][y2] === 0){
+                        battleship.board[x][y] = 8;
+                        battleship.board[x][y2] = 8;
+                        battleship.board[x][y3] = 8;
+                        battleship.board[x][y4] = 8;
+                        if(x === 0 && y != 0 ){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y-1] = 7; 
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x+1][y4] = 7;
+                            battleship.board[x+1][y4+1] = 7;
+                            battleship.board[x][y4+1] = 7;
+                        }
+                        else if(y === 0 && x != 0){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y+1] = 7; 
+                            battleship.board[x-1][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x+1][y4] = 7;
+                            battleship.board[x-1][y4] = 7;
+                            battleship.board[x-1][y4+1] = 7;
+                            battleship.board[x+1][y4+1] = 7;
+                            battleship.board[x][y4+1] = 7;
+                        }
+                        else if(y === 0 && x === 0){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x+1][y4] = 7;
+                            battleship.board[x+1][y4+1] = 7;
+                            battleship.board[x][y4+1] = 7;
+                        }
+                        else{
+                            battleship.board[x-1][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y-1] = 7;
+                            battleship.board[x-1][y+1] = 7;    
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y-1] = 7;
+                            battleship.board[x+1][y4] = 7;
+                            battleship.board[x][y4+1] = 7;
+                            battleship.board[x-1][y4] = 7;
+                            battleship.board[x-1][y4+1] = 7;
+                            battleship.board[x+1][y4+1] = 7;
+                        }
+                        countShips++;
+                    }
+                }
+            }
+        }
+
+        function createShipThreeDeckers(width,height,lengthShip,count_ship){
+            countShips = 0;
+            while(countShips !== count_ship){
+                let location = Math.floor(Math.random() * 2);
+                if( location === 1 ){
+                    location = 'horizontal';
+                    var x = Math.floor(Math.random() * (height - lengthShip - 1));
+                    var y = Math.floor(Math.random() * (width - lengthShip - 1));
+                    var y2 = y+1;
+                    var y3 = y+2;
+                }
+                else{
+                    location = 'vertical';
+                    var y = Math.floor(Math.random() * (width - lengthShip - 1));
+                    var x = Math.floor(Math.random() * (height - lengthShip - 1));
+                    var x2 = x+1;
+                    var x3 = x+2;
+                }
+                if(location === 'vertical'){
+                    if(battleship.board[x][y] === 0 && battleship.board[x2][y] === 0){
+                        battleship.board[x][y] = 8;
+                        battleship.board[x2][y] = 8;
+                        battleship.board[x3][y] = 8;
+                        if(x === 0 && y != 0 ){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y-1] = 7;  
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x2+1][y+1] = 7;   
+                            battleship.board[x3+1][y-1] = 7;  
+                            battleship.board[x3+1][y] = 7;  
+                            battleship.board[x3+1][y+1] = 7;  
+                        }
+                        else if(y === 0 && x != 0){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y+1] = 7; 
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x3+1][y] = 7;  
+                            battleship.board[x3+1][y+1] = 7;   
+                        }
+                        else if(y === 0 && x === 0){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7; 
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x3+1][y] = 7;  
+                            battleship.board[x3+1][y+1] = 7;   
+                        }
+                        else{
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y-1] = 7;
+                            battleship.board[x-1][y+1] = 7;    
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y-1] = 7;
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x3+1][y-1] = 7;  
+                            battleship.board[x3+1][y] = 7;  
+                            battleship.board[x3+1][y+1] = 7;  
+                        }
+                        countShips++;
+                    }
+                }
+                else{
+                    if(battleship.board[x][y] === 0 && battleship.board[x][y2] === 0){
+                        battleship.board[x][y] = 8;
+                        battleship.board[x][y2] = 8;
+                        battleship.board[x][y3] = 8;
+                        if(x === 0 && y != 0 ){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y-1] = 7; 
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x][y3+1] = 7;
+                            battleship.board[x+1][y3+1] = 7;
+                        }
+                        else if(y === 0 && x != 0){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y+1] = 7; 
+                            battleship.board[x-1][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x][y3+1] = 7;
+                            battleship.board[x-1][y3+1] = 7;
+                            battleship.board[x+1][y3+1] = 7;
+                        }
+                        else if(y === 0 && x === 0){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x][y3+1] = 7;
+                            battleship.board[x+1][y3+1] = 7;
+                        }
+                        else{
+                            battleship.board[x-1][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x][y3+1] = 7;
+                            battleship.board[x-1][y3+1] = 7;
+                            battleship.board[x+1][y3+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y-1] = 7;
+                            battleship.board[x-1][y+1] = 7;    
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y-1] = 7;
+                        }
+                        countShips++;
+                    }
+                }
+            }
+        }
+
+        function createShipTwoDeckers(width,height,lengthShip,count_ship){
+            countShips = 0;
+            while(countShips !== count_ship){
+                let location = Math.floor(Math.random() * 2);
+                if( location === 1 ){
+                    location = 'horizontal';
+                    var x = Math.floor(Math.random() * (height - lengthShip - 1));
+                    var y = Math.floor(Math.random() * (width - lengthShip - 1));
+                    var y2 = y+1;
+                }
+                else{
+                    location = 'vertical';
+                    var y = Math.floor(Math.random() * (width - lengthShip - 1));
+                    var x = Math.floor(Math.random() * (height - lengthShip - 1));
+                    var x2 = x+1;
+                }
+                if(location === 'vertical'){
+                    if(battleship.board[x][y] === 0 && battleship.board[x2][y] === 0){
+                        battleship.board[x][y] = 8;
+                        battleship.board[x2][y] = 8;
+                        if(x === 0 && y != 0 ){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y-1] = 7;  
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x2+1][y] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                        }
+                        else if(y === 0 && x != 0){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y+1] = 7; 
+                            battleship.board[x2+1][y] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                        }
+                        else if(y === 0 && x === 0){
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x+1][y+1] = 7; 
+                            battleship.board[x2+1][y] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                        }
+                        else{
+                            battleship.board[x][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y-1] = 7;
+                            battleship.board[x-1][y+1] = 7;    
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y-1] = 7;
+                            battleship.board[x2+1][y-1] = 7;  
+                            battleship.board[x2+1][y] = 7;  
+                            battleship.board[x2+1][y+1] = 7;  
+                            battleship.board[x2+1][y-1] = 7;  
+                        }
+                        countShips++;
+                    }
+                }
+                else{
+                    if(battleship.board[x][y] === 0 && battleship.board[x][y2] === 0){
+                        battleship.board[x][y] = 8;
+                        battleship.board[x][y2] = 8;
+                        if(x === 0 && y != 0 ){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y-1] = 7; 
+                            battleship.board[x][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                        }
+                        else if(y === 0 && x != 0){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y+1] = 7; 
+                            battleship.board[x][y2+1] = 7;
+                            battleship.board[x-1][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                        }
+                        else if(y === 0 && x === 0){
+                            battleship.board[x+1][y] = 7; 
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                        }
+                        else{
+                            battleship.board[x][y2+1] = 7;
+                            battleship.board[x-1][y2+1] = 7;
+                            battleship.board[x+1][y2+1] = 7;
+                            battleship.board[x][y-1] = 7;
+                            battleship.board[x+1][y] = 7;
+                            battleship.board[x-1][y] = 7;
+                            battleship.board[x-1][y-1] = 7;
+                            battleship.board[x-1][y+1] = 7;    
+                            battleship.board[x+1][y+1] = 7;
+                            battleship.board[x+1][y-1] = 7;
+                        }
+                        countShips++;
+                    }
+                }
+            }
+        }
+
+        function createShipOneDeckers(width,height,lengthShip,count_ship){
+            countShips = 0;
+            while(countShips !== count_ship){
+                var x = Math.floor(Math.random() * (height - 1));
+                var y = Math.floor(Math.random() * (width - 1));
+                if(battleship.board[x][y] === 0){
+                    battleship.board[x][y] = 8;
+                    if(x === 0 && y != 0 ){
+                        battleship.board[x][y+1] = 7;
+                        battleship.board[x+1][y] = 7; 
+                        battleship.board[x+1][y+1] = 7;
+                        battleship.board[x][y-1] = 7;
+                        battleship.board[x+1][y-1] = 7;  
+                    }
+                    else if(y === 0 && x != 0){
+                        battleship.board[x][y+1] = 7;
+                        battleship.board[x+1][y] = 7; 
+                        battleship.board[x+1][y+1] = 7;
+                        battleship.board[x-1][y] = 7;
+                        battleship.board[x-1][y+1] = 7; 
+                    }
+                    else if(y === 0 && x === 0){
+                        battleship.board[x][y+1] = 7;
+                        battleship.board[x+1][y] = 7; 
+                        battleship.board[x+1][y+1] = 7;
+                    }
+                    else{
+                        battleship.board[x][y+1] = 7;
+                        battleship.board[x][y-1] = 7;
+                        battleship.board[x+1][y] = 7;
+                        battleship.board[x-1][y] = 7;
+                        battleship.board[x-1][y-1] = 7;
+                        battleship.board[x-1][y+1] = 7;    
+                        battleship.board[x+1][y+1] = 7;
+                        battleship.board[x+1][y-1] = 7;
+                    }
+                    countShips++;
+                }
+            }
+        }
+// clean border ships
+        function getNull(){
+            for (let i = 0; i < GameBoard.boardHeight; i++){
+                for (let j = 0; j < GameBoard.boardWidth; j++){
+                    if(battleship.board[i][j] === 7){
+                        battleship.board[i][j] = 0;
+                    };
+                };
+            };
+        }
+
+        battleship.start();
+
+        $.each(battleship.board, function(){
+            $('#mini').append(this + '<br>');
+        });
+    </script>
+</body>
+</html>
